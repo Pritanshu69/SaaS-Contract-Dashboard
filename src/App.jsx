@@ -1,34 +1,43 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Home from "./pages/Home";
-import About from "./pages/About";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
-  const [token, setToken] = useState(localStorage.getItem("token"));
-
-  // update token if localStorage changes
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setToken(localStorage.getItem("token"));
-    };
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
-
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<Login />} />
+
+      {/* Protected routes */}
       <Route
         path="/dashboard"
-        element={token ? <Dashboard /> : <Navigate to="/login" />}
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
       />
-      <Route path="/home" element={<Home />} />
-      <Route path="/about" element={<About />} />
-      <Route path="*" element={<Navigate to="/login" />} />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
 }
-    
