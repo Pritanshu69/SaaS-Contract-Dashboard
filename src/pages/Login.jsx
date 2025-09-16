@@ -11,10 +11,12 @@ export default function Login() {
     e.preventDefault();
 
     if (password === "test123") {
-      // mock JWT
+      // Save mock JWT + user
       localStorage.setItem("token", "mock-jwt-token-123");
       localStorage.setItem("user", username);
-      navigate("/dashboard");
+
+      // ✅ Redirect to dashboard
+      navigate("/dashboard", { replace: true });
     } else {
       setError("❌ Invalid password. Use: test123");
     }
